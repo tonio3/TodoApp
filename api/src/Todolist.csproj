@@ -18,4 +18,10 @@
     <PackageReference Include="TodoApi" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TodoItems.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
