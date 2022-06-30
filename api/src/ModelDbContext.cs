@@ -11,8 +11,9 @@ public class ModelDbContext : DbContext {
         DbPath = System.IO.Path.Join(path, "todolist.db");
     }
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite($"Data Source={DbPath}");
-
+    {
+        options.UseSqlite($"Data Source={DbPath}");
+    }
 }
 
 public class TodoItem {
