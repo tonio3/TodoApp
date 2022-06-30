@@ -15,19 +15,15 @@ namespace Todolist.Controllers {
 
         [HttpGet]
         public IEnumerable<TodoItem> Get() {
-            return Enumerable.Range(1, 5).Select(index => new TodoItem {
-                Id = Random.Shared.Next(0, 10),
-                IsDone = true,
-                Name = "",
-                Created = DateTime.Now
-            }).ToArray();
+            var x =  modelContext.Items;
+            return x;
         }
 
         [HttpPost]
         public TodoItem Post(TodoItem todoItem) {
            
             
-           var a = modelContext.Items.Add(todoItem);
+            var a = modelContext.Items.Add(todoItem);
             modelContext.SaveChanges();
      
             return a.Entity;
