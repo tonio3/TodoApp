@@ -6,13 +6,11 @@ public class ModelDbContext : DbContext {
     public DbSet<TodoItem> Items { get; set; }
     public string DbPath { get; }
     public ModelDbContext() {
-        var folder = Environment.SpecialFolder.LocalApplicationData;
-        var path = Environment.GetFolderPath(folder);
-        DbPath = System.IO.Path.Join(path, "todolist.db");
+        
     }
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseSqlite($"Data Source={DbPath}");
+        options.UseSqlite("Data Source=TodoItems.db;");
     }
 }
 
