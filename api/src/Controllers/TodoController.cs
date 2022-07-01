@@ -41,5 +41,13 @@ namespace Todolist.Controllers {
 
             return NoContent();
         }
+        [HttpPut]
+        public IEnumerable<TodoItem> Update(int id, string change)
+        {
+            var item = modelContext.Items.Find(id);
+            item.Name = change;
+
+            return modelContext.Items;
+        }
     }
 }
