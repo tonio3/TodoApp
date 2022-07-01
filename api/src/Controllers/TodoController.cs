@@ -15,8 +15,7 @@ namespace Todolist.Controllers {
 
         [HttpGet]
         public IEnumerable<TodoItem> Get() {
-            var x =  modelContext.Items;
-            return x;
+            return modelContext.Items;
         }
 
         [HttpPost]
