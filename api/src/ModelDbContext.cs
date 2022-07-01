@@ -10,10 +10,6 @@ namespace Todolist
     {
         public DbSet<TodoItem> Items { get; set; }
         public string DbPath { get; }
-        public ModelDbContext()
-        {
-
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
