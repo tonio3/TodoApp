@@ -29,18 +29,17 @@ namespace Todolist.Controllers {
         }
 
         [HttpDelete]
-        public IEnumerable<TodoItem> Delete(Int32 Id) 
+        public async Task<IActionResult> Delete(Int32 Id) 
         {
-            foreach (var item in modelContext.Items)
+            var item = await modelContext.Items.FindAsync(Id);
+            if(item == null)
             {
-                if(item.Id == Id)
-                {
-                    modelContext.Items.Remove(item);
-                }
+                return NotFound();
             }
+            modelContext.Items.Remove(item);
+            await modelContext.SaveChangesAsync();
 
-            modelContext.SaveChanges();
-            return modelContext.Items;    
+            return NoContent();
         }
     }
 }
