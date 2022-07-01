@@ -29,9 +29,9 @@ namespace Todolist.Controllers {
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(Int32 Id) 
+        public async Task<IActionResult> Delete(int id) 
         {
-            var item = await modelContext.Items.FindAsync(Id);
+            var item = await modelContext.Items.FindAsync(id);
             if(item == null)
             {
                 return NotFound();
