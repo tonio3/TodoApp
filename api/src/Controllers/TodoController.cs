@@ -15,8 +15,7 @@ namespace Todolist.Controllers {
 
         [HttpGet]
         public IEnumerable<TodoItem> Get() {
-            var x =  modelContext.Items;
-            return x;
+            return modelContext.Items;
         }
 
         [HttpPost]
@@ -30,8 +29,18 @@ namespace Todolist.Controllers {
         }
 
         [HttpDelete]
-        public IEnumerable<TodoItem> Delete() {
-            return null;
+        public IEnumerable<TodoItem> Delete(Int32 Id) 
+        {
+            foreach (var item in modelContext.Items)
+            {
+                if(item.Id == Id)
+                {
+                    modelContext.Items.Remove(item);
+                }
+            }
+
+            modelContext.SaveChanges();
+            return modelContext.Items;    
         }
     }
 }
