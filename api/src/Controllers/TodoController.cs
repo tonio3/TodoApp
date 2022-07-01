@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Todolist.Controllers {
-    [ApiController]
     [Route("[controller]")]
+    [ApiController]
     public class TodoController : ControllerBase {
 
         ModelDbContext modelContext { get; set; }
@@ -43,16 +43,12 @@ namespace Todolist.Controllers {
             return NoContent();
         }
         [HttpPut]
-        public async Task<IActionResult> Update(int id, string change)
+        public async Task<IActionResult> Update(TodoItem item)
         {
-            var item = await modelContext.Items.FindAsync(id);
-            if(item == null)
-            {
-                return NotFound();
-            }
-            item.Name = change;
+            modelContext.Items.Add(item);
             await modelContext.SaveChangesAsync();
-            return NoContent();
+
+            return CreatedAtAction(nameof(Get), item);
         }
     }
 }
