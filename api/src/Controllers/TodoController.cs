@@ -51,6 +51,10 @@ namespace Todolist.Controllers {
             var id = name.Id;
 
             var item = await modelContext.Items.FindAsync(id);
+            if (name.Name == "")
+            {
+                return NotFound();
+            }
             item.Name = name.Name;
             await modelContext.SaveChangesAsync();
 
