@@ -44,6 +44,13 @@ namespace Todolist.Controllers {
             {
                 return BadRequest(); 
             }
+            await foreach(var item in modelContext.Items)
+            {
+                if(todoItem.Name == item.Name)
+                {
+                    return BadRequest();
+                }
+            }
             modelContext.Items.Add(todoItem);
             await modelContext.SaveChangesAsync();
 
@@ -51,7 +58,7 @@ namespace Todolist.Controllers {
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromQuery]int id) 
+        public async Task<IActionResult> Delete([FromRoute]int id) 
         {
             var item = await modelContext.Items.FindAsync(id);
             if(item == null)
