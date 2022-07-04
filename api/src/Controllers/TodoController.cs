@@ -20,16 +20,19 @@ namespace Todolist.Controllers {
         }
 
         [HttpPost]
-        public TodoItem Post(TodoItem todoItem) {
+        public async Task<IActionResult> Post(TodoItem todoItem) {
            
-            
-            var a = modelContext.Items.Add(todoItem);
-            modelContext.SaveChanges();
-     
-            return a.Entity;
+            if(todoItem.Name == "")
+            {
+                return NotFound();
+            }
+            modelContext.Items.Add(todoItem);
+            await modelContext.SaveChangesAsync();
+
+            return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) 
         {
             var item = await modelContext.Items.FindAsync(id);
@@ -42,10 +45,13 @@ namespace Todolist.Controllers {
 
             return NoContent();
         }
-        [HttpPut]
-        public async Task<IActionResult> Update(TodoItem item)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(TodoItem name)
         {
-            modelContext.Items.Add(item);
+            var id = name.Id;
+
+            var item = await modelContext.Items.FindAsync(id);
+            item.Name = name.Name;
             await modelContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), item);
