@@ -13,6 +13,24 @@ namespace Todolist.Controllers {
             modelContext = db;
         }
 
+        [HttpGet("simple")]
+        public async Task<IActionResult> GetSimple()
+        {
+            var data = await modelContext.Items.ToListAsync();
+
+            var result = new List<TodoItemDTO>();
+
+            foreach(var item in data)
+            {
+                result.Add( new TodoItemDTO
+                {
+                    IsDone = item.IsDone,
+                    Name = item.Name
+                });
+            }
+
+            return Ok(result);
+        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> Get() {
@@ -20,11 +38,11 @@ namespace Todolist.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(TodoItem todoItem) {
+        public async Task<IActionResult> Post([FromBody]TodoItem todoItem) {
            
             if(todoItem.Name == "")
             {
-                return NotFound();
+                return NotFound(); 
             }
             modelContext.Items.Add(todoItem);
             await modelContext.SaveChangesAsync();
@@ -33,7 +51,7 @@ namespace Todolist.Controllers {
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) 
+        public async Task<IActionResult> Delete([FromQuery]int id) 
         {
             var item = await modelContext.Items.FindAsync(id);
             if(item == null)
@@ -46,16 +64,20 @@ namespace Todolist.Controllers {
             return NoContent();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(TodoItem name)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody]TodoItem name)
         {
-            var id = name.Id;
+            if(id != name.Id)
+            {
+                return BadRequest();
+            }
 
             var item = await modelContext.Items.FindAsync(id);
             if (name.Name == "")
             {
-                return NotFound();
+                return BadRequest();
             }
             item.Name = name.Name;
+            item.IsDone = name.IsDone;
             await modelContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), item);
