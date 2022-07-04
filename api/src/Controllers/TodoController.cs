@@ -42,7 +42,7 @@ namespace Todolist.Controllers {
            
             if(todoItem.Name == "")
             {
-                return NotFound(); 
+                return BadRequest(); 
             }
             modelContext.Items.Add(todoItem);
             await modelContext.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace Todolist.Controllers {
             var item = await modelContext.Items.FindAsync(id);
             if(item == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             modelContext.Items.Remove(item);
             await modelContext.SaveChangesAsync();
