@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Todolist.Controllers {
-    [Route("api/[controller]")]
+    [Route("api/todoItems")]
     [ApiController]
     public class TodoController : ControllerBase {
 

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 namespace Todolist
 {
-
-
     public class ModelDbContext : DbContext
     {
         public DbSet<TodoItem> Items { get; set; }
