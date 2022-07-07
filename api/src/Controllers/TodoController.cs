@@ -45,10 +45,22 @@ namespace Todolist.Controllers {
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]TodoItem todoItem) {
            
-            if(todoItem.Name == "" || todoItem.User == "")
+            if(todoItem.Name == "")
             {
                 return BadRequest(); 
             }
+
+            if(todoItem.User == "")
+            {
+                todoItem.User = "user";
+            }
+
+            if(todoItem.Importance == "")
+            {
+                todoItem.Importance = "low";
+            }
+
+
             await foreach(var item in modelContext.Items)
             {
                 if(todoItem.Name == item.Name)
@@ -85,7 +97,7 @@ namespace Todolist.Controllers {
             }
 
             var item = await modelContext.Items.FindAsync(id);
-            if (name.Name == "" || name.User == "")
+            if (name.Name == "")
             {
                 return BadRequest();
             }
