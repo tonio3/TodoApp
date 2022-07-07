@@ -8,10 +8,14 @@ import { Icon } from "@mdi/react";
 import { useState } from "react";
 import useSWR from "swr";
 
+
+
 function HomePage() {
 
+	
 	const dialog = useDialog();
 	const [ newTaskName, setNewTaskName ] = useState('');
+	const [ newUserName, setNewUserName ] = useState('');
 
 	const { data, mutate: refresh } = useSWR('/api/todoItems');
 	const createApi = useFetcher('POST /api/todoItems');
@@ -21,10 +25,13 @@ function HomePage() {
 	async function handleCreate() {
 		const newTask = {
 			name: newTaskName,
+			user: newUserName,
 		}
+
 		await createApi.call(newTask);
 		refresh();
 		setNewTaskName('');
+		setNewUserName('');
 	}
 
 	function handleDelete({ id }) {
@@ -66,6 +73,7 @@ function HomePage() {
 			}
 		>
 			<div className="flex items-center gap-4">
+			<TextInput placeholder="Name" className="w-25 p-3	" value={newUserName} onChange={e => setNewUserName	(e.currentTarget.value)} />
 				<TextInput placeholder="Milk" className="flex-grow" value={newTaskName} onChange={e => setNewTaskName(e.currentTarget.value)} />
 				<Button onClick={() => handleCreate()} loading={createApi.loading}>Add</Button>
 			</div>
@@ -76,7 +84,7 @@ function HomePage() {
 						data?.map(task => (
 							<tr key={task.id}>
 								<td width="1px"><Checkbox checked={task.isDone} onChange={() => handleToggle(task)} /></td>
-								<td className={task.isDone ? 'line-through' : ''}>{task.name}</td>
+								<td className="line-throug">{task.user}  {task.name}</td>
 								<td width="1px">
 									<div className="flex gap-2">
 										<ActionIcon variant="transparent" onClick={() => handleUpdate(task)}><Icon path={mdiPencil} /></ActionIcon>

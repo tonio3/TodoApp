@@ -1,9 +1,11 @@
 import HomePage from "@/pages/Home.page"
 
+
+
 function App() {
 
   return (
-    <HomePage />
+    <HomePage />  
   )
 }
 

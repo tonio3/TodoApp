@@ -10,6 +10,6 @@ builder.Services.AddDbContext<ModelDbContext>();
 var app = builder.Build(); app.UseSwagger(); 
 app.UseSwaggerUI(); 
 app.UseDeveloperExceptionPage();
-app.UseCors(opt => opt.WithOrigins("http://localhost:3001").AllowAnyMethod().AllowAnyHeader().AllowCredentials()); //app.UseHttpsRedirection();
+app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials()); //app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

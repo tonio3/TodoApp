@@ -25,22 +25,27 @@ namespace Todolist.Controllers {
                 result.Add( new TodoItemDTO
                 {
                     IsDone = item.IsDone,
-                    Name = item.Name
+                    Name = item.Name,
+                    User = item.User,
                 });
             }
-
+            
             return Ok(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> Get() {
+
+    
             return await modelContext.Items.ToListAsync();
+
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]TodoItem todoItem) {
            
-            if(todoItem.Name == "")
+            if(todoItem.Name == "" || todoItem.User == "")
             {
                 return BadRequest(); 
             }
@@ -63,6 +68,7 @@ namespace Todolist.Controllers {
 
             return NoContent();
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody]TodoItem name)
         {
@@ -72,12 +78,13 @@ namespace Todolist.Controllers {
             }
 
             var item = await modelContext.Items.FindAsync(id);
-            if (name.Name == "")
+            if (name.Name == "" || name.User == "")
             {
                 return BadRequest();
             }
             item.Name = name.Name;
             item.IsDone = name.IsDone;
+            item.User = name.User;
             await modelContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), item);
