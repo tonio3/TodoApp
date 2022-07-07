@@ -2,20 +2,18 @@ import ConfirmDialog from "@/components/Confirm.dialog";
 import TodoDialog from "@/components/Todo.dialog";
 import useDialog from "@/contexts/Dialog.context";
 import useFetcher from "@/hooks/useFetcher";
-import { ActionIcon, AppShell, Button, Checkbox, Divider, Header, Table, Text, TextInput } from "@mantine/core";
+import { ActionIcon, AppShell, Button, Checkbox, Divider, Header, Table, Text, TextInput, Select } from "@mantine/core";
 import { mdiFormatListChecks, mdiPencil, mdiTrashCan } from "@mdi/js";
 import { Icon } from "@mdi/react";
 import { useState } from "react";
 import useSWR from "swr";
 
-
-
 function HomePage() {
 
-	
 	const dialog = useDialog();
 	const [ newTaskName, setNewTaskName ] = useState('');
 	const [ newUserName, setNewUserName ] = useState('');
+	const [ newSelect, setNewSelect ] = useState('');
 
 	const { data, mutate: refresh } = useSWR('/api/todoItems');
 	const createApi = useFetcher('POST /api/todoItems');
@@ -26,12 +24,14 @@ function HomePage() {
 		const newTask = {
 			name: newTaskName,
 			user: newUserName,
+			importance: newSelect,
 		}
 
 		await createApi.call(newTask);
 		refresh();
 		setNewTaskName('');
 		setNewUserName('');
+		setNewSelect('');	
 	}
 
 	function handleDelete({ id }) {
@@ -73,6 +73,16 @@ function HomePage() {
 			}
 		>
 			<div className="flex items-center gap-4">
+			<Select
+				placeholder="Importance"
+				
+				onChange={(e) => setNewSelect(e)}
+				data={[
+					{ value: 'low', label: 'LOW' },
+					{ value: 'medium', label: 'MEDIUM' },
+					{ value: 'high', label: 'HIGH' },
+				]}
+				/>
 			<TextInput placeholder="Name" className="w-25 p-3	" value={newUserName} onChange={e => setNewUserName	(e.currentTarget.value)} />
 				<TextInput placeholder="Milk" className="flex-grow" value={newTaskName} onChange={e => setNewTaskName(e.currentTarget.value)} />
 				<Button onClick={() => handleCreate()} loading={createApi.loading}>Add</Button>
@@ -84,7 +94,7 @@ function HomePage() {
 						data?.map(task => (
 							<tr key={task.id}>
 								<td width="1px"><Checkbox checked={task.isDone} onChange={() => handleToggle(task)} /></td>
-								<td className="line-throug">{task.user}  {task.name}</td>
+								<td className="line-throug">{task.user}: {task.name} - {task.importance}</td>
 								<td width="1px">
 									<div className="flex gap-2">
 										<ActionIcon variant="transparent" onClick={() => handleUpdate(task)}><Icon path={mdiPencil} /></ActionIcon>
